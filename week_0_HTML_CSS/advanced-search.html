@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Search</title>
+        <link 
+        rel="stylesheet" 
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" 
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" 
+        crossorigin="anonymous"
+        >
+    </head>
+    <body>
+        <div class="container d-flex justify-content-end">
+            <a href="index.html">Google Search</a>
+        </div>
+        <div class="container d-flex justify-content-start mb-4">
+            <h2>Advanced Search</h2>
+        </div>
+        <div class="container">
+            <div class="col-3 d-flex justify-content-start mb-4">
+                <strong>Find pages with...</strong>
+            </div>
+            <form action="https://google.com/advanced_search">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-3 d-flex justify-content-start">
+                            all these words:
+                        </div>
+                        <div class="col-6 mb-2">
+                            <input type="text" name="as_q">
+                        </div> 
+                    </div>
+                    <div class="row">
+                        <div class="col-3 d-flex justify-content-start">
+                            this exact word or phrase:
+                        </div>
+                        <div class="col-6 mb-2">
+                            <input type="text" name="as_epq">
+                        </div> 
+                    </div>
+                    <div class="row">
+                        <div class="col-3 d-flex justify-content-start">
+                            any of these words:
+                        </div>
+                        <div class="col-6 mb-2">
+                            <input type="text" name="as_oq">
+                        </div> 
+                    </div>
+                    <div class="row">
+                        <div class="col-3 d-flex justify-content-start">
+                            none of these words:
+                        </div>
+                        <div class="col-6 mb-2">
+                            <input type="text" name="as_eq">
+                        </div> 
+                    </div>
+                </div>
+                <div class="col-3 d-flex justify-content-start mt-4">
+                    <input type="submit" value="Search">
+                </div>
+            </form>
+
+        </div>
+    </body>
+</html>
