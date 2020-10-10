@@ -1,0 +1,15 @@
+.google-input {
+    border-radius: 25px;
+    border-width: 1px;
+    width: 600px; 
+    height: 50px
+}
+.google-img {
+    width: 250px;
+    height: 80px;
+}
+
+.spacing {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

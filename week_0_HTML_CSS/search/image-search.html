@@ -9,21 +9,23 @@
         integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" 
         crossorigin="anonymous"
         >
+        <link rel="stylesheet" href="styles/styles.css">
     </head>
     <body>
-        <div class="container d-flex justify-content-end">
-            <a href="index.html">Google Search</a>
+        <div class="container d-flex justify-content-end spacing">
+            <a class="text-secondary" href="index.html">Google Search</a>
+        </div>
+        <div style="height: 150px;"></div>
+        <div class="container d-flex justify-content-center">
+            <img class="google-img" src="media/google-images.png" alt="google logo">
         </div>
         <div class="container d-flex justify-content-center">
-            <h2>Image Search</h2>
-        </div>
-        <div class="container d-flex justify-content-center">
-            <form action="https://google.com/images">
-                <div class="mb-2">
-                    <input type="text" name="q">
+            <form action="https://google.com/images" autocomplete="off">
+                <div class="spacing">
+                    <input class="google-input spacing" type="text" name="q">
                 </div>
                 <div class="d-flex justify-content-center">
-                    <input type="submit" value="Search">
+                    <input class="btn btn-light" type="submit" value="Search">
                 </div>
             </form>
         </div>

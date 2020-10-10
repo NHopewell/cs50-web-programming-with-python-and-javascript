@@ -8,24 +8,25 @@
         integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" 
         crossorigin="anonymous"
         >
+        <link rel="stylesheet" href="styles/styles.css">
     </head>
     <body>
-        <div class="container d-flex justify-content-end">
-            <a class="mr-2" href="image-search.html">Image Search</a>
-            <a href="advanced-search.html">Advanced Search</a>
+        <div class="container d-flex justify-content-end spacing">
+            <a class="text-secondary mr-4" href="image-search.html">Images</a>
+            <a class="text-secondary" href="advanced-search.html">Advanced</a>
+        </div>
+        <div style="height: 150px;"></div>
+        <div class="container d-flex justify-content-center">
+            <img class="google-img" src="media/google-logo.png" alt="google logo">
         </div>
         <div class="container d-flex justify-content-center">
-            <h2>
-                Google Search
-            </h2>
-        </div>
-        <div class="container d-flex justify-content-center">
-            <form action="https://google.com/search">
-                <div class="mb-2">
-                    <input type="text" name="q">
+            <form action="https://google.com/search" autocomplete="off">
+                <div class="spacing">
+                    <input class="google-input spacing" type="text" name="q">
                 </div>
                 <div class="d-flex justify-content-center">
-                    <input type="submit" value="Search">
+                    <input type="submit" name="btnK" class="btn btn-light mr-2" value="Google Search">
+                    <input type="submit" name="btnI" class="btn btn-light" value="I'm Feeling Lucky">
                 </div>
             </form>
         </div>
