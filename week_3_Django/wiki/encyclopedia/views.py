@@ -76,4 +76,28 @@ def new(request):
     else:
         return render(request, "encyclopedia/new.html")
 
+    
+def edit(request, title):
+    if request.method == 'POST':
+
+        entry_content = request.POST.get("entry_content")
+
+        util.save_entry(title, entry_content)
+
+        page = util.get_entry(title)
+
+        converter = Markdown()
+        html_page = converter.convert(page)
+        
+        return render(request, "encyclopedia/page.html", {
+            "title": title,
+            "page": html_page
+        })
+    else:
+        page = util.get_entry(title)
+        return render(request, "encyclopedia/edit.html", {
+            "title": title,
+            "page": page
+        })
+
 
