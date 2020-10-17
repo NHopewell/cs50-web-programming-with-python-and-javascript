@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.contrib import messages
 
 from markdown2 import Markdown, markdown
+from random import choice
 
 from . import util
 
@@ -12,15 +13,7 @@ def index(request):
     if request.method == "POST":
         query = request.POST.get("q")
         if query in util.list_entries():
-
-            page = util.get_entry(query)
-            converter = Markdown()
-            html_page = converter.convert(page)
-
-            return render(request, "encyclopedia/page.html", {
-                "title": query,
-                "page": html_page
-            })
+            return redirect(page, title=query)
         else:
             matches = []
             for entry in util.list_entries():
@@ -63,16 +56,8 @@ def new(request):
                 return redirect('new')
 
         util.save_entry(entry_title, entry_content)
-
-        page = util.get_entry(entry_title)
-
-        converter = Markdown()
-        html_page = converter.convert(page)
         
-        return render(request, "encyclopedia/page.html", {
-            "title": entry_title,
-            "page": html_page
-        })
+        return redirect(page, title=entry_title)
     else:
         return render(request, "encyclopedia/new.html")
 
@@ -81,23 +66,20 @@ def edit(request, title):
     if request.method == 'POST':
 
         entry_content = request.POST.get("entry_content")
-
         util.save_entry(title, entry_content)
-
-        page = util.get_entry(title)
-
-        converter = Markdown()
-        html_page = converter.convert(page)
         
-        return render(request, "encyclopedia/page.html", {
-            "title": title,
-            "page": html_page
-        })
+        return redirect("page", title=title)
     else:
         page = util.get_entry(title)
         return render(request, "encyclopedia/edit.html", {
             "title": title,
             "page": page
         })
+
+
+def random(request):
+    entries = util.list_entries()
+    title = choice(entries)
+    return redirect("page", title=title)
 
 
