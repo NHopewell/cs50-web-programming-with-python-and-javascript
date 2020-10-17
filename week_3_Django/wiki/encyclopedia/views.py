@@ -51,4 +51,7 @@ def page(request, title):
         "page": html_page
     })
 
+def new(request):
+    return render(request, "encyclopedia/new.html")
+
 
