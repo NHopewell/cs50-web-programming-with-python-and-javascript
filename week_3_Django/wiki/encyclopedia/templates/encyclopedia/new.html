@@ -6,11 +6,19 @@
 
 {% block body %}
     <h1>Add new entry</h1>
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-danger" role="alert">
+            {{ message }}
+        </div>
+        {% endfor %}
+
+    {% endif %}
     <form action="{% url 'new'%}" method="POST">
         {% csrf_token %}
-        <div>Entry Title:</div>
+        <div>Entry Name:</div>
         <input type="text" name="entry_title">
-        <div>Entry content:</div>
+        <div>Entry Content:</div>
         <textarea name="entry_content" style="min-width:300px; height:200px; resize:both;"></textarea>
         <div><input type="submit"></div>
         

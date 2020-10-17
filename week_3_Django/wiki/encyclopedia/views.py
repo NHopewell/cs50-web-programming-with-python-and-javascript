@@ -1,7 +1,8 @@
 from django import forms
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.contrib import messages
 
 from markdown2 import Markdown, markdown
 
@@ -52,6 +53,27 @@ def page(request, title):
     })
 
 def new(request):
-    return render(request, "encyclopedia/new.html")
+    if request.method == 'POST':
+        entry_title = request.POST.get("entry_title")
+        entry_content = request.POST.get("entry_content")
+
+        for entry in util.list_entries():
+            if entry_title.lower() == entry.lower():
+                messages.error(request, 'Entry already exists. Try again.')
+                return redirect('new')
+
+        util.save_entry(entry_title, entry_content)
+
+        page = util.get_entry(entry_title)
+
+        converter = Markdown()
+        html_page = converter.convert(page)
+        
+        return render(request, "encyclopedia/page.html", {
+            "title": entry_title,
+            "page": html_page
+        })
+    else:
+        return render(request, "encyclopedia/new.html")
 
 
