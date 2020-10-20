@@ -15,7 +15,7 @@ class Listing(models.Model):
     image = models.ImageField(default='default.png', upload_to='listing_pics')
     description = models.TextField()
     date_posted = models.DateTimeField(default=timezone.now)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="listings")
 
     def __str__(self):
         return f"{self.title}, posted by: {self.owner}."
@@ -23,9 +23,9 @@ class Listing(models.Model):
 
 class Bid(models.Model):
     bid = models.DecimalField(max_digits=8, decimal_places=2)
-    bidder = models.ForeignKey(User, on_delete=models.CASCADE)
+    bidder = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bids")
     bid_date = models.DateTimeField(default=timezone.now)
-    listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="all_bids")
 
     def __str__(self):
         return f"Bid: {self.bid}, Bidder: {self.bidder}"
@@ -34,8 +34,8 @@ class Bid(models.Model):
 class Comment(models.Model):
     content = models.TextField()
     date_posted = models.DateTimeField(default=timezone.now)
-    listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="listing_comments")
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
 
     def __str__(self):
         return f"Comment by {self.author} on post titled: '{self.listing.title}'."
