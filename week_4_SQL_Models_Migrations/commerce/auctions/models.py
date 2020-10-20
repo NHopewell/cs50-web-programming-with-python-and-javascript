@@ -6,7 +6,7 @@ from  django.utils import timezone
 class User(AbstractUser):
     
     def __str__(self):
-        return f"id: {self.id}, name: {self.first_name} {self.last_name}""
+        return f"id: {self.id}, name: {self.first_name} {self.last_name}."
 
 
 class Listing(models.Model):
@@ -23,8 +23,8 @@ class Listing(models.Model):
 
 class Bid(models.Model):
     bid = models.DecimalField(max_digits=8, decimal_places=2)
-    bidder = models.ForeignKey(User, no_delete=models.CASCADE)
-    bid_date = date_posted = models.DateTimeField(default=timezone.now)
+    bidder = models.ForeignKey(User, on_delete=models.CASCADE)
+    bid_date = models.DateTimeField(default=timezone.now)
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
 
     def __str__(self):
