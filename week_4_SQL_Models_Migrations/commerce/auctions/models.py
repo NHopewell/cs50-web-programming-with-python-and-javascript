@@ -11,8 +11,8 @@ class User(AbstractUser):
 
 class Listing(models.Model):
     title = models.CharField(max_length=100)
-    category = models.CharField(max_length=30)
-    image = models.ImageField(default='default.png', upload_to='listing_pics')
+    category = models.CharField(max_length=30, blank=True)
+    image = models.ImageField(default='default.png', upload_to='listing_pics', blank=True)
     description = models.TextField()
     starting_bid = models.DecimalField(max_digits=8, decimal_places=2)
     date_posted = models.DateTimeField(default=timezone.now)
