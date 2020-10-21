@@ -5,7 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User
+from .models import User, Listing
 from .forms import NewListingForm
 
 
@@ -67,6 +67,22 @@ def register(request):
 
 @login_required
 def create_listing(request):
+
+    if request.method == 'POST':
+        form = NewListingForm(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data["title"]
+            category = form.cleaned_data["category"]
+            image = form.cleaned_data["image"]
+            description = form.cleaned_data["description"]
+            starting_bid = form.cleaned_data["starting_bid"]
+
+            new_listing = Listing(title=title, category=category, image=image, 
+                description=description, starting_bid=starting_bid, owner_id=request.user.id)
+            
+            new_listing.save()
+
+
     return render(request, "auctions/create_listing.html", {
         "form": NewListingForm()
     })
