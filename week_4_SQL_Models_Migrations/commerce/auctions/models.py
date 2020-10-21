@@ -11,15 +11,16 @@ class User(AbstractUser):
 
 class Listing(models.Model):
     title = models.CharField(max_length=100)
-    list_price = models.DecimalField(max_digits=8, decimal_places=2)
+    category = models.CharField(max_length=30)
     image = models.ImageField(default='default.png', upload_to='listing_pics')
     description = models.TextField()
+    starting_bid = models.DecimalField(max_digits=8, decimal_places=2)
     date_posted = models.DateTimeField(default=timezone.now)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="listings")
 
     def __str__(self):
         return f"{self.title}, posted by: {self.owner}."
-        
+
 
 class Bid(models.Model):
     bid = models.DecimalField(max_digits=8, decimal_places=2)
