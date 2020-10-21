@@ -16,11 +16,10 @@ class Listing(models.Model):
     description = models.TextField()
     date_posted = models.DateTimeField(default=timezone.now)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="listings")
-    bids = models.ForeignKey(Bid, on_delete=models.CASCADE, related_name="listing")
 
     def __str__(self):
         return f"{self.title}, posted by: {self.owner}."
-
+        
 
 class Bid(models.Model):
     bid = models.DecimalField(max_digits=8, decimal_places=2)
