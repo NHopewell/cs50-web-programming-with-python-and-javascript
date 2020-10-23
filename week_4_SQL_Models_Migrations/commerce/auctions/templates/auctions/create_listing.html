@@ -1,7 +1,7 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-<form actions="{% url 'create_listing' %}" method="POST">
+<form actions="{% url 'create_listing' %}" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     <table>
         {{ form.as_table }}

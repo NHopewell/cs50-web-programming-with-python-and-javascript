@@ -8,11 +8,17 @@ class User(AbstractUser):
     def __str__(self):
         return f"id: {self.id}, name: {self.first_name} {self.last_name}."
 
+nums = '1 2 3 4 5 6 7'.split()
+labs = ['Art & Collectibles', 'Clothing', 
+'Electronics', 'Health & Beauty', 'Home & Yard', 
+'Jewellery', 'Sporting Goods']
+
+CATEGORY_CHOICES = list(zip(nums, labs))
 
 class Listing(models.Model):
     title = models.CharField(max_length=100)
-    category = models.CharField(max_length=30, blank=True)
-    image = models.ImageField(default='default.png', upload_to='listing_pics', blank=True)
+    category = models.CharField(max_length=30, blank=True, choices=CATEGORY_CHOICES)
+    image = models.ImageField(default='default.png', upload_to='listing_pics')
     description = models.TextField()
     starting_bid = models.DecimalField(max_digits=8, decimal_places=2)
     date_posted = models.DateTimeField(default=timezone.now)
