@@ -79,6 +79,8 @@ def create_listing(request):
             listing.owner = request.user
             listing.save()
 
+            return HttpResponseRedirect(reverse("index"))
+
 
     return render(request, "auctions/create_listing.html", {
         "form": NewListingForm()

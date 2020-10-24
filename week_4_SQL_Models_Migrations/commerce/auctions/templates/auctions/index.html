@@ -8,6 +8,20 @@
             <div class="col">
                 <img src="{{ listing.image.url }}">
             </div>
+            <div class="col border">
+                <div>
+                    <strong>{{ listing.title }} </strong> 
+                </div>
+                <div>
+                    Starting big: ${{ listing.starting_bid }}
+                </div>
+                <div>
+                    Date Posted: {{ listing.date_posted }}
+                </div>
+                <div>
+                    {{ listing.description }}
+                </div>
+            </div>
         </div>
     </div>
 
