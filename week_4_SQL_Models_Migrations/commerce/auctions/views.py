@@ -79,19 +79,6 @@ def create_listing(request):
             listing.owner = request.user
             listing.save()
 
-            """
-            title = form.cleaned_data["title"]
-            category = form.cleaned_data["category"]
-            image = form.cleaned_data["image"]
-            description = form.cleaned_data["description"]
-            starting_bid = form.cleaned_data["starting_bid"]
-
-            new_listing = Listing(title=title, category=category, image=image, 
-                description=description, starting_bid=starting_bid, owner_id=request.user.id)
-            
-            new_listing.save()
-            """
-
 
     return render(request, "auctions/create_listing.html", {
         "form": NewListingForm()

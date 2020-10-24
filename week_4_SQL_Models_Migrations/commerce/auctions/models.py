@@ -9,6 +9,7 @@ class User(AbstractUser):
         return f"id: {self.id}, name: {self.first_name} {self.last_name}."
 
 nums = '1 2 3 4 5 6 7'.split()
+
 labs = ['Art & Collectibles', 'Clothing', 
 'Electronics', 'Health & Beauty', 'Home & Yard', 
 'Jewellery', 'Sporting Goods']
