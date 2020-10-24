@@ -2,6 +2,8 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from  django.utils import timezone
 
+from PIL import Image
+
 
 class User(AbstractUser):
     
@@ -27,6 +29,20 @@ class Listing(models.Model):
 
     def __str__(self):
         return f"{self.title}, posted by: {self.owner}."
+
+    def save(self, *args, **kwargs):
+        """override save() to resize img to save
+           room on file system"""
+        super().save(*args, **kwargs)
+
+        # resive img if larger
+        img = Image.open(f"./{self.image.url}")
+
+        if img.height > 400 or img.width > 400:
+            output_size = (400, 400)
+            img.thumbnail(output_size)
+            img = img.convert("RGB")
+            img.save(f"./{self.image.url}") # save to same path
 
 
 class Bid(models.Model):
