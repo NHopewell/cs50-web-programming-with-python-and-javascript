@@ -11,7 +11,7 @@
         {% for listing in watchlist%}
             <li>
                 <div>
-                    <strong>{{listing.title}}</strong>
+                    <strong><a href="{% url 'listing' listing.id %}">{{listing.title}}</a></strong>
                     <div class="ml-2"><em>posted: {{listing.date_posted}}</em></div>
                 </div>
             </li>

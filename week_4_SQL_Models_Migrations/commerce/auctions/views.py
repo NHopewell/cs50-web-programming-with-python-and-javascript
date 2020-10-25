@@ -71,10 +71,12 @@ def register(request):
 def listing(request, listing_id):
     
     if request.method == 'POST':
-        watchlist_item = Watchlist(listing_id=listing_id, user_id=request.user.id)
-        watchlist_item.save()
-
-        on_watchlist = True
+        already_on_watchlist = Watchlist.objects.filter(listing_id=listing_id, user_id=request.user.id)
+        if not already_on_watchlist:
+            watchlist_item = Watchlist(listing_id=listing_id, user_id=request.user.id)
+            watchlist_item.save()
+        else:
+            Watchlist.objects.filter(listing_id=listing_id, user_id=request.user.id).delete()
 
         return HttpResponseRedirect(reverse("watchlist"))
     else:
@@ -133,6 +135,7 @@ def watchlist(request):
     rows = Watchlist.objects.filter(user_id=request.user.id)
     watchlist = []
     for row in rows:
+        print(row.listing_id)
         watchlist.append(Listing.objects.get(pk=row.listing_id))
 
 

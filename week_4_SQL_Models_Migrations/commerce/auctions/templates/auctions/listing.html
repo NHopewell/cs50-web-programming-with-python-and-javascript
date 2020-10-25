@@ -13,9 +13,9 @@
             <form actions="{% url 'listing' listing.id %}" method="POST">
                 {% csrf_token %}
                 {% if on_watchlist %}
-                    Remove from watchlist
+                    <input type="submit" value="remove from watchlist">
                 {% else %}
-                    <a type="submit" class="btn btn-secondary">add to my watchlist</a>
+                    <input type="submit" value="add to watchlist">
                 {% endif %}
             </form>
             <div class="mb-2">
