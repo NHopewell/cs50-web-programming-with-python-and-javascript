@@ -69,22 +69,36 @@ def register(request):
 
 
 def listing(request, listing_id):
+    
+    if request.method == 'POST':
+        watchlist_item = Watchlist(listing_id=listing_id, user_id=request.user.id)
+        watchlist_item.save()
 
-    listing = Listing.objects.get(pk=listing_id)
-    owner = User.objects.get(pk=listing.owner_id)
+        on_watchlist = True
 
-    return render(request, "auctions/listing.html", {
-        "listing": listing,
-        "owner": owner
-    })
+        return HttpResponseRedirect(reverse("watchlist"))
+    else:
+        listing = Listing.objects.get(pk=listing_id)
+        owner = User.objects.get(pk=listing.owner_id)
+        watchlist = Watchlist.objects.filter(listing_id=listing_id, user_id=request.user.id)
+
+        if watchlist:
+            on_watchlist = True
+        else:
+            on_watchlist = False
+
+        return render(request, "auctions/listing.html", {
+            "listing": listing,
+            "owner": owner,
+            "on_watchlist": on_watchlist
+        })
 
 
 @login_required
 def create_listing(request):
 
     if request.method == 'POST':
-        form = NewListingForm(request.POST, 
-        request.FILES)
+        form = NewListingForm(request.POST, request.FILES)
         if form.is_valid():
             listing = form.save(commit=False)
             listing.owner = request.user
@@ -115,7 +129,13 @@ def delete_listing(request, listing_id):
 
 @login_required
 def watchlist(request, listing_id):
-    
+
+    watchlist = Watchlist.objects.filter(user_id=request.user.id)
+
+    return render(request, "auctions/watchlist.html", {
+        "watchlist": watchlist
+    })
+
 
 
 
