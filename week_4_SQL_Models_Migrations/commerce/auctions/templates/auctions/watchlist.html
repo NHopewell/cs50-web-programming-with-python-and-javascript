@@ -1,0 +1,24 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+<div class="container">
+    <h2 class="mb-4">My Watchlist</h2>
+</div>
+
+<div class="container mb-4 mt-4 p-2">
+    <ol>
+        {% for listing in watchlist%}
+            <li>
+                <div>
+                    <strong>{{listing.title}}</strong>
+                    <div class="ml-2"><em>posted: {{listing.date_posted}}</em></div>
+                </div>
+            </li>
+        {% empty %}
+            You have no items in your watchlist.
+        {% endfor %}
+    </ol> 
+</div>
+
+{% endblock %}

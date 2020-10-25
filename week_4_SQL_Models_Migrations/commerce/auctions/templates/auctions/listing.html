@@ -10,11 +10,14 @@
             <img src="{{ listing.image.url }}">
         </div>
         <div class="col p-2">
-            {% if on_watchlist %}
-                Remove from watchlist
-            {% else %}
-                Add to watchlist
-            {% endif %}
+            <form actions="{% url 'listing' listing.id %}" method="POST">
+                {% csrf_token %}
+                {% if on_watchlist %}
+                    Remove from watchlist
+                {% else %}
+                    <a type="submit" class="btn btn-secondary">add to my watchlist</a>
+                {% endif %}
+            </form>
             <div class="mb-2">
                 <strong>${{ listing.starting_bid }}</strong>
             </div>

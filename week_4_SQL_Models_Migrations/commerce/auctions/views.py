@@ -128,9 +128,13 @@ def delete_listing(request, listing_id):
 
 
 @login_required
-def watchlist(request, listing_id):
+def watchlist(request):
 
-    watchlist = Watchlist.objects.filter(user_id=request.user.id)
+    rows = Watchlist.objects.filter(user_id=request.user.id)
+    watchlist = []
+    for row in rows:
+        watchlist.append(Listing.objects.get(pk=row.listing_id))
+
 
     return render(request, "auctions/watchlist.html", {
         "watchlist": watchlist
