@@ -5,7 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User, Listing, Watchlist
+from .models import User, Listing, Watchlist, CATEGORY_CHOICES
 from .forms import NewListingForm
 
 
@@ -135,13 +135,39 @@ def watchlist(request):
     rows = Watchlist.objects.filter(user_id=request.user.id)
     watchlist = []
     for row in rows:
-        print(row.listing_id)
         watchlist.append(Listing.objects.get(pk=row.listing_id))
 
 
     return render(request, "auctions/watchlist.html", {
         "watchlist": watchlist
     })
+
+
+def categories(request):
+
+    all_categories = ['Art & Collectibles', 'Clothing', 
+        'Electronics', 'Health & Beauty', 'Home & Yard', 
+        'Jewellery', 'Sporting Goods']
+
+    category_listings = [Listing.objects.filter(category=cat) for cat in all_categories]
+
+    categories = dict(zip(all_categories, category_listings))
+    
+    return render(request, "auctions/categories.html", {
+        "categories": categories
+    })
+
+
+def category(request, category):
+
+    for (k,v) in CATEGORY_CHOICES:
+        if v == category: 
+            listings = Listing.objects.filter(category=k)
+            
+            return render(request, "auctions/category.html", {
+                "category": category,
+                "listings": listings
+            })
 
 
 
