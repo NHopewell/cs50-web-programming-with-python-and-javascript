@@ -68,6 +68,17 @@ def register(request):
         return render(request, "auctions/register.html")
 
 
+def listing(request, listing_id):
+
+    listing = Listing.objects.get(pk=listing_id)
+    owner = User.objects.get(pk=listing.owner_id)
+
+    return render(request, "auctions/listing.html", {
+        "listing": listing,
+        "owner": owner
+    })
+
+
 @login_required
 def create_listing(request):
 
@@ -80,19 +91,26 @@ def create_listing(request):
             listing.save()
 
             return HttpResponseRedirect(reverse("index"))
+    else:
+            
+        return render(request, "auctions/create_listing.html", {
+            "form": NewListingForm()
+        })
 
 
-    return render(request, "auctions/create_listing.html", {
-        "form": NewListingForm()
-    })
+@login_required
+def delete_listing(request, listing_id):
+
+    if request.method == "POST":
+        Listing.objects.filter(pk=listing_id).delete()
+
+        return HttpResponseRedirect(reverse("index"))
+    else:
+        listing = Listing.objects.get(pk=listing_id)
+    
+        return render(request, "auctions/delete_listing.html", {
+            "listing": listing
+        })
 
 
-def listing(request, listing_id):
 
-    listing = Listing.objects.get(pk=listing_id)
-    owner = User.objects.get(pk=listing.owner_id)
-
-    return render(request, "auctions/listing.html", {
-        "listing": listing,
-        "owner": owner
-    })

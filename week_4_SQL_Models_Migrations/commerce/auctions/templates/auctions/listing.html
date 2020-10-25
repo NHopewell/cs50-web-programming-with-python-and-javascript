@@ -10,10 +10,7 @@
             <img src="{{ listing.image.url }}">
         </div>
         <div class="col p-2">
-            <div>
-                <h3>{{ listing.title }} </h3> 
-            </div>
-            <div class="m-2">
+            <div class="mb-2">
                 <strong>${{ listing.starting_bid }}</strong>
             </div>
             <div>
@@ -28,6 +25,11 @@
                 <div>posted by: {{owner.username}}</div>
                 <div>{{owner.email}}</div>
             </div>
+
+            {% if listing.owner_id == user.id %}
+            <a href="{% url 'delete_listing' listing.id %}">Close this auction</a>
+
+            {% endif %}
         </div>
     </div>
 </div>
