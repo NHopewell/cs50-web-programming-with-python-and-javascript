@@ -5,7 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User, Listing
+from .models import User, Listing, Watchlist
 from .forms import NewListingForm
 
 
@@ -111,6 +111,11 @@ def delete_listing(request, listing_id):
         return render(request, "auctions/delete_listing.html", {
             "listing": listing
         })
+
+
+@login_required
+def watchlist(request, listing_id):
+    
 
 
 
