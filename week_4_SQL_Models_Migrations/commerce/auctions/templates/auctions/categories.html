@@ -9,7 +9,7 @@
 <div class="container mb-4 mt-4 p-2">
     {% for cat in categories %}
     <div class="m-2">
-        <a href="{% url 'category' cat %}">{{cat}}</a>
+        <strong><a href="{% url 'category' cat %}">{{cat}}</a></strong>
     </div>
         
     {% endfor %}
