@@ -85,3 +85,14 @@ def create_listing(request):
     return render(request, "auctions/create_listing.html", {
         "form": NewListingForm()
     })
+
+
+def listing(request, listing_id):
+
+    listing = Listing.objects.get(pk=listing_id)
+    owner = User.objects.get(pk=listing.owner_id)
+
+    return render(request, "auctions/listing.html", {
+        "listing": listing,
+        "owner": owner
+    })
