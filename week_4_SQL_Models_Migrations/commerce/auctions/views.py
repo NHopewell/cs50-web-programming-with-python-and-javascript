@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -75,10 +76,22 @@ def listing(request, listing_id):
         if not already_on_watchlist:
             watchlist_item = Watchlist(listing_id=listing_id, user_id=request.user.id)
             watchlist_item.save()
+
+            messages.success(request, 'Added to watchlist.')
+
+            return HttpResponseRedirect(reverse("watchlist"))
         else:
             Watchlist.objects.filter(listing_id=listing_id, user_id=request.user.id).delete()
+            listing = Listing.objects.get(pk=listing_id)
+            owner = User.objects.get(pk=listing.owner_id)
 
-        return HttpResponseRedirect(reverse("watchlist"))
+            messages.success(request, 'Removed from watchlist.')
+
+            return render(request, "auctions/listing.html", {
+                "listing": listing,
+                "owner": owner,
+                "on_watchlist": False
+            })
     else:
         listing = Listing.objects.get(pk=listing_id)
         owner = User.objects.get(pk=listing.owner_id)
@@ -163,7 +176,7 @@ def category(request, category):
     for (k,v) in CATEGORY_CHOICES:
         if v == category: 
             listings = Listing.objects.filter(category=k)
-            
+
             return render(request, "auctions/category.html", {
                 "category": category,
                 "listings": listings

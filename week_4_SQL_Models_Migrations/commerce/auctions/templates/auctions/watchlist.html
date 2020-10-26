@@ -7,6 +7,13 @@
 </div>
 
 <div class="container mb-4 mt-4 p-2">
+    {% if messages %}
+        {% for message in messages %}
+        <div{% if message.tags %} class="alert alert-success {{ message.tags }}"{% endif %} role="alert">
+            {{ message }}
+        </div>
+        {% endfor %}
+    {% endif %}
     <ol>
         {% for listing in watchlist%}
             <li>

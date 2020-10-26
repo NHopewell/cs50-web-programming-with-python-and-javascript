@@ -3,6 +3,13 @@
 {% block body %}
 <div class="container">
     <h2 class="mb-4">{{ listing.title }}</h2>
+    {% if messages %}
+        {% for message in messages %}
+        <div{% if message.tags %} class="alert alert-primary {{ message.tags }}"{% endif %} role="alert">
+            {{ message }}
+        </div>
+        {% endfor %}
+    {% endif %}
 </div>
 <div class="container mb-4 mt-4 p-2">
     <div class="row">
@@ -10,14 +17,6 @@
             <img src="{{ listing.image.url }}">
         </div>
         <div class="col p-2">
-            <form actions="{% url 'listing' listing.id %}" method="POST">
-                {% csrf_token %}
-                {% if on_watchlist %}
-                    <input type="submit" value="remove from watchlist">
-                {% else %}
-                    <input type="submit" value="add to watchlist">
-                {% endif %}
-            </form>
             <div class="mb-2">
                 <strong>${{ listing.starting_bid }}</strong>
             </div>
@@ -40,7 +39,18 @@
                 <div><a class="btn btn-danger" href="{% url 'delete_listing' listing.id %}">Remove auction</a></div>
 
             </div>
-
+            {% elif request.user.is_authenticated %}
+            <div class="mt-4">
+                <a class="btn btn-primary mb-2" href="#">Place bid</a>
+                <form actions="{% url 'listing' listing.id %}" method="POST">
+                    {% csrf_token %}
+                    {% if on_watchlist %}
+                        <input type="submit" value="remove from watchlist" class="btn btn-secondary mb-4">
+                    {% else %}
+                        <input type="submit" value="add to watchlist" class="btn btn-secondary mb-4">
+                    {% endif %}
+                </form>
+            </div>
             {% endif %}
         </div>
     </div>
