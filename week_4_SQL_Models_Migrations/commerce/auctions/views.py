@@ -8,6 +8,7 @@ from django.urls import reverse
 
 from .models import User, Listing, Watchlist, CATEGORY_CHOICES
 from .forms import NewListingForm
+from .helpers import get_listings_by_category, all_categories
 
 
 def index(request):
@@ -71,7 +72,7 @@ def register(request):
 
 def listing(request, listing_id):
     
-    if request.method == 'POST':
+    if request.method == 'POST' and 'submit-watchlist' in request.POST:
         already_on_watchlist = Watchlist.objects.filter(listing_id=listing_id, user_id=request.user.id)
         if not already_on_watchlist:
             watchlist_item = Watchlist(listing_id=listing_id, user_id=request.user.id)
@@ -92,6 +93,8 @@ def listing(request, listing_id):
                 "owner": owner,
                 "on_watchlist": False
             })
+    elif request.method == 'POST' and 'submit-bid' in request.POST:
+        pass
     else:
         listing = Listing.objects.get(pk=listing_id)
         owner = User.objects.get(pk=listing.owner_id)
@@ -158,13 +161,7 @@ def watchlist(request):
 
 def categories(request):
 
-    all_categories = ['Art & Collectibles', 'Clothing', 
-        'Electronics', 'Health & Beauty', 'Home & Yard', 
-        'Jewellery', 'Sporting Goods']
-
-    category_listings = [Listing.objects.filter(category=cat) for cat in all_categories]
-
-    categories = dict(zip(all_categories, category_listings))
+    categories = all_categories(Listing)
     
     return render(request, "auctions/categories.html", {
         "categories": categories
@@ -173,14 +170,12 @@ def categories(request):
 
 def category(request, category):
 
-    for (k,v) in CATEGORY_CHOICES:
-        if v == category: 
-            listings = Listing.objects.filter(category=k)
+    category, listings = get_listings_by_category(Listing, category)
 
-            return render(request, "auctions/category.html", {
-                "category": category,
-                "listings": listings
-            })
+    return render(request, "auctions/category.html", {
+        "category": category,
+        "listings": listings
+    })
 
 
 
