@@ -6,7 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User, Listing, Watchlist, CATEGORY_CHOICES
+from .models import User, Listing, Watchlist, Bid, CATEGORY_CHOICES
 from .forms import NewListingForm
 from .helpers import (
     get_listings_by_category, all_categories, map_category, get_diff_days
@@ -73,6 +73,11 @@ def register(request):
 
 
 def listing(request, listing_id):
+
+    listing = Listing.objects.get(pk=listing_id)
+    owner = User.objects.get(pk=listing.owner_id)
+    category = map_category(listing.category)
+    days_active = get_diff_days(listing.date_posted)
     
     if request.method == 'POST' and 'submit-watchlist' in request.POST:
         already_on_watchlist = Watchlist.objects.filter(listing_id=listing_id, user_id=request.user.id)
@@ -85,10 +90,6 @@ def listing(request, listing_id):
             return HttpResponseRedirect(reverse("watchlist"))
         else:
             Watchlist.objects.filter(listing_id=listing_id, user_id=request.user.id).delete()
-            listing = Listing.objects.get(pk=listing_id)
-            owner = User.objects.get(pk=listing.owner_id)
-            category = map_category(listing.category)
-            days_active = get_diff_days(listing.date_posted)
 
             messages.success(request, 'Removed from watchlist.')
 
@@ -100,12 +101,46 @@ def listing(request, listing_id):
                 "on_watchlist": False
             })
     elif request.method == 'POST' and 'submit-bid' in request.POST:
-        pass
+        bid = float(request.POST['bid'])
+        all_bids = [q.bid for q in Bid.objects.all()]
+
+
+        if (bid > listing.starting_bid):
+            if not all_bids or (bid > float(max(all_bids))):
+                new_bid = Bid(bid=bid, bidder_id=request.user.id, listing_id=listing.id)
+                new_bid.save()
+
+                messages.success(request, 'Your bid has been submitted')
+
+                return render(request, "auctions/listing.html", {
+                    "listing": listing,
+                    "owner": owner,
+                    "category": category,
+                    "days_active": days_active,
+                    "on_watchlist": False
+                })
+            else:
+                messages.error(request, 'You cannot bid less than the current highest bidder. Your bid was not submitted.')
+
+                return render(request, "auctions/listing.html", {
+                    "listing": listing,
+                    "owner": owner,
+                    "category": category,
+                    "days_active": days_active,
+                    "on_watchlist": False
+                })
+
+        else:
+            messages.error(request, 'You must bid more than the starting bid. Your bid was not submitted.')
+            
+            return render(request, "auctions/listing.html", {
+                    "listing": listing,
+                    "owner": owner,
+                    "category": category,
+                    "days_active": days_active,
+                    "on_watchlist": False
+                })
     else:
-        listing = Listing.objects.get(pk=listing_id)
-        owner = User.objects.get(pk=listing.owner_id)
-        category = map_category(listing.category)
-        days_active = get_diff_days(listing.date_posted)
         watchlist = Watchlist.objects.filter(listing_id=listing_id, user_id=request.user.id)
 
         if watchlist:

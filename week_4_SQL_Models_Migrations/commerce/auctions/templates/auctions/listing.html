@@ -5,7 +5,7 @@
     <h2 class="mb-4">{{ listing.title }}</h2>
     {% if messages %}
         {% for message in messages %}
-        <div{% if message.tags %} class="alert alert-primary {{ message.tags }}"{% endif %} role="alert">
+        <div class="alert alert-{{ message.tags }}" role="alert">
             {{ message }}
         </div>
         {% endfor %}
@@ -76,7 +76,7 @@
                 <form class="form-inline mb-4" actions="{% url 'listing' listing.id %}" method="POST">
                     {% csrf_token %}
                     <div class="form-group mx-sm-3 mb-2">
-                      <input type="text" class="form-control" placeholder="0.00">
+                      <input type="text" class="form-control" name="bid" placeholder="0.00">
                     </div>
                     <button type="submit" class="btn btn-primary mb-2" name="submit-bid">Place bid</button>
                   </form>
