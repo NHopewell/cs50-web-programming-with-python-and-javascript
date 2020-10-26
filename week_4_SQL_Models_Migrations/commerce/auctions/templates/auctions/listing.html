@@ -26,25 +26,25 @@
         <div class="col p-2">
 
             <div class="container mb-4">
-                <div class="row mb-4">
-                  <div class="col">Starting Bid:</div>
-                  <div class="col-9"><strong>${{ listing.starting_bid }}</strong></div>
-                </div>
                 <div class="row">
                     <div class="col">Category:</div>
-                    <div class="col-9">{{ listing.category }}</div>
+                    <div class="col-9">{{ category }}</div>
                   </div>
                 <div class="row">
                     <div class="col">Date Posted:</div>
                     <div class="col-9">{{ listing.date_posted }}</div>
                   </div>
                   <div class="row">
+                    <div class="col">Days Active:</div>
+                    <div class="col-9">{{ days_active }}</div>
+                  </div>
+                  <div class="row mt-4">
                     <div class="col">Posted By:</div>
                     <div class="col-9">{{owner.username}}</div>
                   </div>
                   <div class="row">
                     <div class="col">Contact:</div>
-                    <div class="col-9">{{owner.email}}</div>
+                    <div class="col-9"><a href="mailto:{{owner.email}}">{{owner.email}}</a></div>
                   </div>
               </div>
 
@@ -57,36 +57,50 @@
 
             </div>
             {% elif request.user.is_authenticated %}
-            <div class="container mt-4">
+
+
+            <div class="col p-2">
+
+                <div class="container mb-4">
+                    <div class="row">
+                        <div class="col">Starting Bid:</div>
+                        <div class="col-9"><strong>${{ listing.starting_bid }}</strong></div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col">Top bid:</div>
+                        <div class="col-9"><strong style="font-size: 125%">$PLACE HOLDER</strong></div>
+                    </div>
+                </div>
+
 
                 <form class="form-inline mb-4" actions="{% url 'listing' listing.id %}" method="POST">
                     {% csrf_token %}
-                    <div class="form-group mb-2">
-                      <input type="text" readonly class="form-control-plaintext"  value="Top bid: $">
-                    </div>
                     <div class="form-group mx-sm-3 mb-2">
                       <input type="text" class="form-control" placeholder="0.00">
                     </div>
                     <button type="submit" class="btn btn-primary mb-2" name="submit-bid">Place bid</button>
                   </form>
-                <form actions="{% url 'listing' listing.id %}" method="POST">
-                    {% csrf_token %}
-                    {% if on_watchlist %}
-                        <div >
-                          <em>Remove from watchlist:</em>
-                          <button type="submit" class="btn btn-link" name="submit-watchlist">
-                            <i class="fas fa-times-circle fa-2x"></i>
-                            </button>
-                        </div>
-                    {% else %}
-                        <div>
-                            <em>Add to watchlist: </em>
-                            <button type="submit" class="btn btn-link" name="submit-watchlist">
-                                <i class="fas fa-glasses fa-2x"></i>
-                            </button>
-                        </div>
-                    {% endif %}
-                </form>
+                <div class="container">
+                    <form actions="{% url 'listing' listing.id %}" method="POST">
+                        {% csrf_token %}
+                        {% if on_watchlist %}
+                            <div >
+                              <em>Remove from watchlist:</em>
+                              <button type="submit" class="btn btn-link" name="submit-watchlist">
+                                <i class="fas fa-times-circle fa-2x"></i>
+                                </button>
+                            </div>
+                        {% else %}
+                            <div>
+                                <em>Add to watchlist: </em>
+                                <button type="submit" class="btn btn-link" name="submit-watchlist">
+                                    <i class="fas fa-glasses fa-2x"></i>
+                                </button>
+                            </div>
+                        {% endif %}
+                    </form>
+
+                </div>
             </div>
             {% endif %}
         </div>

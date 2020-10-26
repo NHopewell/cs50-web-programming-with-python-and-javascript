@@ -8,7 +8,9 @@ from django.urls import reverse
 
 from .models import User, Listing, Watchlist, CATEGORY_CHOICES
 from .forms import NewListingForm
-from .helpers import get_listings_by_category, all_categories
+from .helpers import (
+    get_listings_by_category, all_categories, map_category, get_diff_days
+)
 
 
 def index(request):
@@ -85,12 +87,16 @@ def listing(request, listing_id):
             Watchlist.objects.filter(listing_id=listing_id, user_id=request.user.id).delete()
             listing = Listing.objects.get(pk=listing_id)
             owner = User.objects.get(pk=listing.owner_id)
+            category = map_category(listing.category)
+            days_active = get_diff_days(listing.date_posted)
 
             messages.success(request, 'Removed from watchlist.')
 
             return render(request, "auctions/listing.html", {
                 "listing": listing,
                 "owner": owner,
+                "category": category,
+                "days_active": days_active,
                 "on_watchlist": False
             })
     elif request.method == 'POST' and 'submit-bid' in request.POST:
@@ -98,6 +104,8 @@ def listing(request, listing_id):
     else:
         listing = Listing.objects.get(pk=listing_id)
         owner = User.objects.get(pk=listing.owner_id)
+        category = map_category(listing.category)
+        days_active = get_diff_days(listing.date_posted)
         watchlist = Watchlist.objects.filter(listing_id=listing_id, user_id=request.user.id)
 
         if watchlist:
@@ -108,6 +116,8 @@ def listing(request, listing_id):
         return render(request, "auctions/listing.html", {
             "listing": listing,
             "owner": owner,
+            "category": category,
+            "days_active": days_active,
             "on_watchlist": on_watchlist
         })
 
