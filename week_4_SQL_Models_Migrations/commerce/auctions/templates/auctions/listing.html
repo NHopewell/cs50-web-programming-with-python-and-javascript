@@ -36,7 +36,11 @@
                 </div>
                 <div class="row">
                     <div class="col">Days Active:</div>
+                    {% if days_active < 1 %}
+                    <div class="col-9"><em>less than a day.</em></div>
+                    {% else %}
                     <div class="col-9">{{ days_active }}</div>
+                    {% endif %}
                 </div>
                 <div class="row mt-4">
                     <div class="col">Posted By:</div>
