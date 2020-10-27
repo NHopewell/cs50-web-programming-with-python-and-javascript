@@ -230,7 +230,3 @@ def category(request, category):
         "category": category,
         "listings": listings
     })
-
-
-
-

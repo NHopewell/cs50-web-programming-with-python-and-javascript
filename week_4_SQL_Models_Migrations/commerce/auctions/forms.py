@@ -2,13 +2,6 @@ from django import forms
 
 from .models import Listing
 
-nums = '1 2 3 4 5 6 7'.split()
-labs = ['Art & Collectibles', 'Clothing', 
-'Electronics', 'Health & Beauty', 'Home & Yard', 
-'Jewellery', 'Sporting Goods']
-
-CATEGORY_CHOICES = list(zip(nums, labs))
-
 class NewListingForm(forms.ModelForm):
 
     class Meta:

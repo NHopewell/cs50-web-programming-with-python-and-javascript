@@ -52,8 +52,8 @@
 
             {% if listing.owner_id == user.id %}
             <div class="container mt-4">
-                <div><a class="btn btn-success mb-2" href="#">End this auction</a></div>
-                <div><a class="btn btn-danger" href="{% url 'delete_listing' listing.id %}">Remove auction</a></div>
+                <div><a class="btn btn-success mb-2" href="#">Close out auction</a></div>
+                <div><a class="btn btn-danger" href="{% url 'delete_listing' listing.id %}">Take down auction</a></div>
 
             </div>
             {% elif request.user.is_authenticated %}

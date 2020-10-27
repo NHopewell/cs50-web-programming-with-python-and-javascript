@@ -18,6 +18,11 @@ labs = ['Art & Collectibles', 'Clothing',
 
 CATEGORY_CHOICES = list(zip(nums, labs))
 
+ACTIVE_STATUS_CHOICES = (
+    ('Active', 'Active'),
+    ('Inactive', 'Inactive')
+)
+
 class Listing(models.Model):
     title = models.CharField(max_length=100)
     category = models.CharField(max_length=30, blank=True, choices=CATEGORY_CHOICES)
@@ -25,6 +30,7 @@ class Listing(models.Model):
     description = models.TextField()
     starting_bid = models.DecimalField(max_digits=8, decimal_places=2)
     date_posted = models.DateTimeField(default=timezone.now)
+    active_status = models.CharField(max_length=10, choices=ACTIVE_STATUS_CHOICES, default='Active')
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="listings")
 
     def __str__(self):
