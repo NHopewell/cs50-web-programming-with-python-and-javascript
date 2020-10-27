@@ -114,6 +114,7 @@ def listing(request, listing_id):
             if not all_bids or (bid > top_bid):
                 new_bid = Bid(bid=bid, bidder_id=request.user.id, listing_id=listing.id)
                 new_bid.save()
+                top_bid = new_bid.bid
 
                 messages.success(request, 'Your bid has been submitted')
 
