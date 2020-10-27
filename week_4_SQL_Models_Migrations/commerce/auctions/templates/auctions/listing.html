@@ -4,11 +4,11 @@
 <div class="container">
     <h2 class="mb-4">{{ listing.title }}</h2>
     {% if messages %}
-        {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}" role="alert">
-            {{ message }}
-        </div>
-        {% endfor %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}" role="alert">
+        {{ message }}
+    </div>
+    {% endfor %}
     {% endif %}
 </div>
 <div class="container mb-4 mt-4 p-2">
@@ -18,9 +18,9 @@
                 <div class="card">
                     <img class="card-img-top" src="{{ listing.image.url }}">
                     <div class="card-body">
-                      <p class="card-text">{{ listing.description }}</p>
+                        <p class="card-text">{{ listing.description }}</p>
                     </div>
-                  </div>
+                </div>
             </div>
         </div>
         <div class="col p-2">
@@ -29,36 +29,28 @@
                 <div class="row">
                     <div class="col">Category:</div>
                     <div class="col-9">{{ category }}</div>
-                  </div>
+                </div>
                 <div class="row">
                     <div class="col">Date Posted:</div>
                     <div class="col-9">{{ listing.date_posted }}</div>
-                  </div>
-                  <div class="row">
+                </div>
+                <div class="row">
                     <div class="col">Days Active:</div>
                     <div class="col-9">{{ days_active }}</div>
-                  </div>
-                  <div class="row mt-4">
+                </div>
+                <div class="row mt-4">
                     <div class="col">Posted By:</div>
                     <div class="col-9">{{owner.username}}</div>
-                  </div>
-                  <div class="row">
+                </div>
+                <div class="row">
                     <div class="col">Contact:</div>
                     <div class="col-9"><a href="mailto:{{owner.email}}">{{owner.email}}</a></div>
-                  </div>
-              </div>
+                </div>
+            </div>
 
             <hr class="mr-4">
 
-            {% if listing.owner_id == user.id %}
-            <div class="container mt-4">
-                <div><a class="btn btn-success mb-2" href="#">Close out auction</a></div>
-                <div><a class="btn btn-danger" href="{% url 'delete_listing' listing.id %}">Take down auction</a></div>
-
-            </div>
-            {% elif request.user.is_authenticated %}
-
-
+            {% if request.user.is_authenticated %}
             <div class="col p-2">
 
                 <div class="container mb-4">
@@ -70,41 +62,56 @@
                         <div class="col">Top bid:</div>
                         {% if top_bid %}
                         <div class="col-9"><strong style="font-size: 125%">${{top_bid}}</strong></div>
+                        <div class="col">Top bidder:</div>
+                        {% if top_bidder == request.user.username %}
+                        <div class="col-9"><em>{{top_bidder}}</em> (You)</div>
                         {% else %}
-                        <div class="col-9"><em>$No top bid yet.</em></div>
+                        <div class="col-9"><em>{{top_bidder}}</em></div>
+                        {% endif %}
+                        {% else %}
+                        <div class="col-9"><em>No top bid yet.</em></div>
                         {% endif %}
                     </div>
                 </div>
 
-
+                {% if not listing.owner_id == user.id %}
                 <form class="form-inline mb-4" actions="{% url 'listing' listing.id %}" method="POST">
                     {% csrf_token %}
                     <div class="form-group mx-sm-3 mb-2">
-                      <input type="text" class="form-control" name="bid" placeholder="0.00">
+                        <input type="text" class="form-control" name="bid" placeholder="0.00">
                     </div>
                     <button type="submit" class="btn btn-primary mb-2" name="submit-bid">Place bid</button>
-                  </form>
-                <div class="container">
-                    <form actions="{% url 'listing' listing.id %}" method="POST">
-                        {% csrf_token %}
-                        {% if on_watchlist %}
-                            <div >
-                              <em>Remove from watchlist:</em>
-                              <button type="submit" class="btn btn-link" name="submit-watchlist">
-                                <i class="fas fa-times-circle fa-2x"></i>
-                                </button>
-                            </div>
-                        {% else %}
-                            <div>
-                                <em>Add to watchlist: </em>
-                                <button type="submit" class="btn btn-link" name="submit-watchlist">
-                                    <i class="fas fa-glasses fa-2x"></i>
-                                </button>
-                            </div>
-                        {% endif %}
-                    </form>
+                </form>
+                {% endif %}
+            </div>
+            {% endif %}
 
-                </div>
+            {% if listing.owner_id == user.id %}
+            <div class="container mt-4">
+                <div><a class="btn btn-success mb-2" href="#">Close out auction</a></div>
+                <div><a class="btn btn-danger" href="{% url 'delete_listing' listing.id %}">Take down auction</a></div>
+
+            </div>
+            {% else %}
+            <div class="container">
+                <form actions="{% url 'listing' listing.id %}" method="POST">
+                    {% csrf_token %}
+                    {% if on_watchlist %}
+                    <div>
+                        <em>Remove from watchlist:</em>
+                        <button type="submit" class="btn btn-link" name="submit-watchlist">
+                            <i class="fas fa-times-circle fa-2x"></i>
+                        </button>
+                    </div>
+                    {% else %}
+                    <div>
+                        <em>Add to watchlist: </em>
+                        <button type="submit" class="btn btn-link" name="submit-watchlist">
+                            <i class="fas fa-glasses fa-2x"></i>
+                        </button>
+                    </div>
+                    {% endif %}
+                </form>
             </div>
             {% endif %}
         </div>

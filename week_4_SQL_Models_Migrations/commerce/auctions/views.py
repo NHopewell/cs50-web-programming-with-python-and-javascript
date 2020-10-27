@@ -84,7 +84,10 @@ def listing(request, listing_id):
     if bids:
         all_bids = [q.bid for q in Bid.objects.filter(listing_id=listing.id)]
         top_bid = float(max(all_bids))
-
+        top_bidder = User.objects.get(pk=Bid.objects.get(bid=top_bid).bidder_id).username
+    else:
+        top_bid = None
+        top_bidder = None
     
     if request.method == 'POST' and 'submit-watchlist' in request.POST:
         already_on_watchlist = Watchlist.objects.filter(listing_id=listing_id, user_id=request.user.id)
@@ -105,6 +108,8 @@ def listing(request, listing_id):
                 "owner": owner,
                 "category": category,
                 "days_active": days_active,
+                "top_bid": top_bid,
+                "top_bidder": top_bidder,
                 "on_watchlist": False
             })
     elif request.method == 'POST' and 'submit-bid' in request.POST:
@@ -124,6 +129,7 @@ def listing(request, listing_id):
                     "category": category,
                     "days_active": days_active,
                     "top_bid": top_bid,
+                    "top_bidder": top_bidder,
                     "on_watchlist": False
                 })
             else:
@@ -135,6 +141,7 @@ def listing(request, listing_id):
                     "category": category,
                     "days_active": days_active,
                     "top_bid": top_bid,
+                    "top_bidder": top_bidder,
                     "on_watchlist": False
                 })
 
@@ -147,6 +154,7 @@ def listing(request, listing_id):
                     "category": category,
                     "days_active": days_active,
                     "top_bid": top_bid,
+                    "top_bidder": top_bidder,
                     "on_watchlist": False
                 })
     else:
@@ -163,6 +171,7 @@ def listing(request, listing_id):
             "category": category,
             "days_active": days_active,
             "top_bid": top_bid,
+            "top_bidder": top_bidder,
             "on_watchlist": on_watchlist
         })
 
