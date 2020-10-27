@@ -120,7 +120,8 @@ USE_TZ = True
 
 MESSAGE_TAGS = {
     messages.ERROR: 'danger',
-    messages.SUCCESS: 'success'
+    messages.SUCCESS: 'success',
+    messages.INFO: 'info'
 }
 
 # Static files (CSS, JavaScript, Images)

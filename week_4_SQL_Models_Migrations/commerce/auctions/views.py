@@ -78,6 +78,13 @@ def listing(request, listing_id):
     owner = User.objects.get(pk=listing.owner_id)
     category = map_category(listing.category)
     days_active = get_diff_days(listing.date_posted)
+
+    bids = Bid.objects.filter(listing_id=listing.id)
+    all_bids = None
+    if bids:
+        all_bids = [q.bid for q in Bid.objects.filter(listing_id=listing.id)]
+        top_bid = float(max(all_bids))
+
     
     if request.method == 'POST' and 'submit-watchlist' in request.POST:
         already_on_watchlist = Watchlist.objects.filter(listing_id=listing_id, user_id=request.user.id)
@@ -85,13 +92,13 @@ def listing(request, listing_id):
             watchlist_item = Watchlist(listing_id=listing_id, user_id=request.user.id)
             watchlist_item.save()
 
-            messages.success(request, 'Added to watchlist.')
+            messages.info(request, 'Added to watchlist.')
 
             return HttpResponseRedirect(reverse("watchlist"))
         else:
             Watchlist.objects.filter(listing_id=listing_id, user_id=request.user.id).delete()
 
-            messages.success(request, 'Removed from watchlist.')
+            messages.info(request, 'Removed from watchlist.')
 
             return render(request, "auctions/listing.html", {
                 "listing": listing,
@@ -102,11 +109,9 @@ def listing(request, listing_id):
             })
     elif request.method == 'POST' and 'submit-bid' in request.POST:
         bid = float(request.POST['bid'])
-        all_bids = [q.bid for q in Bid.objects.all()]
-
-
+        
         if (bid > listing.starting_bid):
-            if not all_bids or (bid > float(max(all_bids))):
+            if not all_bids or (bid > top_bid):
                 new_bid = Bid(bid=bid, bidder_id=request.user.id, listing_id=listing.id)
                 new_bid.save()
 
@@ -117,6 +122,7 @@ def listing(request, listing_id):
                     "owner": owner,
                     "category": category,
                     "days_active": days_active,
+                    "top_bid": top_bid,
                     "on_watchlist": False
                 })
             else:
@@ -127,6 +133,7 @@ def listing(request, listing_id):
                     "owner": owner,
                     "category": category,
                     "days_active": days_active,
+                    "top_bid": top_bid,
                     "on_watchlist": False
                 })
 
@@ -138,6 +145,7 @@ def listing(request, listing_id):
                     "owner": owner,
                     "category": category,
                     "days_active": days_active,
+                    "top_bid": top_bid,
                     "on_watchlist": False
                 })
     else:
@@ -153,6 +161,7 @@ def listing(request, listing_id):
             "owner": owner,
             "category": category,
             "days_active": days_active,
+            "top_bid": top_bid,
             "on_watchlist": on_watchlist
         })
 

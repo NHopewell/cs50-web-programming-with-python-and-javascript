@@ -64,11 +64,15 @@
                 <div class="container mb-4">
                     <div class="row">
                         <div class="col">Starting Bid:</div>
-                        <div class="col-9"><strong>${{ listing.starting_bid }}</strong></div>
+                        <div class="col-9">${{ listing.starting_bid }}</div>
                     </div>
                     <div class="row mb-4">
                         <div class="col">Top bid:</div>
-                        <div class="col-9"><strong style="font-size: 125%">$PLACE HOLDER</strong></div>
+                        {% if top_bid %}
+                        <div class="col-9"><strong style="font-size: 125%">${{top_bid}}</strong></div>
+                        {% else %}
+                        <div class="col-9"><em>$No top bid yet.</em></div>
+                        {% endif %}
                     </div>
                 </div>
 
