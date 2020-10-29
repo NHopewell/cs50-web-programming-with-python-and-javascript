@@ -83,7 +83,7 @@ def listing(request, listing_id):
     all_bids = None
     if bids:
         all_bids = [q.bid for q in Bid.objects.filter(listing_id=listing.id)]
-        top_bid = float(max(all_bids))
+        top_bid = format(float(max(all_bids)), '.2f')
         top_bidder = User.objects.get(pk=Bid.objects.get(bid=top_bid).bidder_id).username
     else:
         top_bid = None
@@ -192,6 +192,16 @@ def create_listing(request):
         return render(request, "auctions/create_listing.html", {
             "form": NewListingForm()
         })
+
+@login_required
+def my_listings(request):
+    
+    listings = Listing.objects.filter(owner_id=request.user.id)
+
+    return render(request, "auctions/my-listings.html", {
+        "listings": listings
+    })
+
 
 
 @login_required

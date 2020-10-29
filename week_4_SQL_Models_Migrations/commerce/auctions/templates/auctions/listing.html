@@ -55,17 +55,19 @@
             <hr class="mr-4">
 
             {% if request.user.is_authenticated %}
-            <div class="col p-2">
+            <div class="col p-0">
 
                 <div class="container mb-4">
                     <div class="row">
                         <div class="col">Starting Bid:</div>
                         <div class="col-9">${{ listing.starting_bid }}</div>
                     </div>
-                    <div class="row mb-4">
+                    <div class="row">
                         <div class="col">Top bid:</div>
                         {% if top_bid %}
                         <div class="col-9"><strong style="font-size: 125%">${{top_bid}}</strong></div>
+                    </div>
+                    <div class="row mb-4">
                         <div class="col">Top bidder:</div>
                         {% if top_bidder == request.user.username %}
                         <div class="col-9"><em>{{top_bidder}}</em> (You)</div>
