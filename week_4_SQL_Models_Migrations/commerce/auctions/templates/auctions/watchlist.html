@@ -14,18 +14,30 @@
         </div>
         {% endfor %}
     {% endif %}
-    <ol>
         {% for listing in watchlist%}
-            <li>
-                <div>
-                    <strong><a href="{% url 'listing' listing.id %}">{{listing.title}}</a></strong>
-                    <div class="ml-2"><em>posted: {{listing.date_posted}}</em></div>
+        <div class="card">
+            <p class="card-header">Posted on: <strong>{{listing.date_posted}}</strong></p>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <img src="{{ listing.image.url }}" class="img-thumbnail" style="width: 175px">
+                    </div>
+                    
+                    <div class="col-10">
+                        <h4 class="card-title">{{listing.title}}</h4>
+                        <p class="card-text">Starting Bid: ${{listing.starting_bid}}</p>
+                        <a href="{% url 'listing' listing.id %}" class="btn btn-primary">See listing</a>
+
+                    </div>
                 </div>
-            </li>
+
+            </div>
+          </div>
         {% empty %}
+        <div class="container">
             You have no items in your watchlist.
+        </div>
         {% endfor %}
-    </ol> 
 </div>
 
 {% endblock %}
