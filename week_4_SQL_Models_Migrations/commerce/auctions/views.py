@@ -14,11 +14,17 @@ from .helpers import (
 
 
 def index(request):
-    listings = Listing.objects.all()
+    listings = Listing.objects.filter(status='active')
     return render(request, "auctions/index.html", {
         "listings": listings
     })
 
+
+def closed_listings(request):
+    listings = Listing.objects.filter(status='closed')
+    return render(request, "auctions/closed_listings.html", {
+        "listings": listings
+    })
 
 def login_view(request):
     if request.method == "POST":
