@@ -6,7 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User, Listing, Watchlist, Bid, CATEGORY_CHOICES
+from .models import User, Listing, Watchlist, Bid, ClosedAuctions, CATEGORY_CHOICES
 from .forms import NewListingForm
 from .helpers import (
     get_listings_by_category, all_categories, map_category, get_diff_days
@@ -116,10 +116,11 @@ def listing(request, listing_id):
         bid = float(request.POST['bid'])
         
         if (bid > listing.starting_bid):
-            if not all_bids or (bid > top_bid):
+            if not all_bids or (bid > float(top_bid)):
                 new_bid = Bid(bid=bid, bidder_id=request.user.id, listing_id=listing.id)
                 new_bid.save()
                 top_bid = new_bid.bid
+                top_bidder = request.user.username
 
                 messages.success(request, 'Your bid has been submitted')
 
@@ -195,8 +196,23 @@ def create_listing(request):
 
 
 @login_required
-def close_listing(request, listing_id):
+def close_listing(request, listing_id, top_bidder):
 
+    if request.method == "POST":
+        listing = Listing.objects.filter(pk=listing_id)
+        listing.update(status="closed")
+        closed_auction = ClosedAuctions(winner=top_bidder)
+        closed_auction.save()
+
+        return HttpResponseRedirect(reverse("index"))
+    else:
+        listing = Listing.objects.get(pk=listing_id)
+
+        return render(request, "auctions/close_listing.html", {
+            "listing": listing,
+            "top_bidder": top_bidder
+            })
+    
 
 @login_required
 def my_listings(request):
@@ -210,7 +226,6 @@ def my_listings(request):
 
 @login_required
 def delete_listing(request, listing_id):
-
     if request.method == "POST":
         Listing.objects.filter(pk=listing_id).delete()
 

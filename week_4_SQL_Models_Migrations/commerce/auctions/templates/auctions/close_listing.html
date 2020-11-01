@@ -1,0 +1,21 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<div actions="{% url 'close_listing' listing.id top_bidder%}" class="container">
+    <form method="POST">
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Close Auction</legend>
+            <h2>Are you sure you would like to close the following auction: "{{ listing.title }}"?</h2>
+            <p>Closing this auction will take down your active listing and make {{top_bidder}} the winner.</p>
+        </fieldset>
+        <div class="form-group">
+            <button class="btn btn-outline-danger" type="submit">Close Auction</button>
+            <a class="btn btn-outline-secondary" href="{% url 'listing' listing.id %}">Cancel</a>
+        </div>
+    </form>
+</div>
+
+
+
+{% endblock %}

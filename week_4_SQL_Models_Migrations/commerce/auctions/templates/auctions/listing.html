@@ -36,8 +36,10 @@
                 </div>
                 <div class="row">
                     <div class="col">Days Active:</div>
-                    {% if days_active < 1 %}
-                    <div class="col-9"><em>less than a day.</em></div>
+                    {% if listing.status == 'closed'%}
+                    <div class="col-9"><em>This auction is CLOSED.</em></div>
+                    {% elif days_active < 1 %}
+                    <div class="col-9"><em>Less than a day.</em></div>
                     {% else %}
                     <div class="col-9">{{ days_active }}</div>
                     {% endif %}
@@ -63,19 +65,39 @@
                         <div class="col-9">${{ listing.starting_bid }}</div>
                     </div>
                     <div class="row">
-                        <div class="col">Top bid:</div>
-                        {% if top_bid %}
-                        <div class="col-9"><strong style="font-size: 125%">${{top_bid}}</strong></div>
-                    </div>
-                    <div class="row mb-4">
-                        <div class="col">Top bidder:</div>
-                        {% if top_bidder == request.user.username %}
-                        <div class="col-9"><em>{{top_bidder}}</em> (You)</div>
+                        {% if listing.status == 'closed'%}
+
+                            <div class="col">Winning bid:</div>
+                            {% if top_bid %}
+                                <div class="col-9"><strong style="font-size: 125%">${{top_bid}}</strong></div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col">Winning bidder:</div>
+                                {% if top_bidder == request.user.username %}
+                                    <div class="col-9"><em>{{top_bidder}}</em> (YOU WON!!!)</div>
+                                {% else %}
+                                <div class="col-9"><em>{{top_bidder}}</em></div>
+                                {% endif %}
+                            {% else %}
+                                <div class="col-9"><em>There was no top bid.</em></div>
+                            {% endif %}
+                            
+
                         {% else %}
-                        <div class="col-9"><em>{{top_bidder}}</em></div>
-                        {% endif %}
-                        {% else %}
-                        <div class="col-9"><em>No top bid yet.</em></div>
+                            <div class="col">Top bid:</div>
+                            {% if top_bid %}
+                                <div class="col-9"><strong style="font-size: 125%">${{top_bid}}</strong></div>
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col">Top bidder:</div>
+                                {% if top_bidder == request.user.username %}
+                                    <div class="col-9"><em>{{top_bidder}}</em> (You)</div>
+                                {% else %}
+                                <div class="col-9"><em>{{top_bidder}}</em></div>
+                                {% endif %}
+                            {% else %}
+                                <div class="col-9"><em>No top bid yet.</em></div>
+                            {% endif %}
                         {% endif %}
                     </div>
                 </div>
@@ -94,7 +116,7 @@
 
             {% if listing.owner_id == user.id %}
             <div class="container mt-4">
-                <div><a class="btn btn-success mb-2" href="#">Close out auction</a></div>
+                <div><a class="btn btn-success mb-2" href="{% url 'close_listing' listing.id top_bidder %}">Close out auction</a></div>
                 <div><a class="btn btn-danger" href="{% url 'delete_listing' listing.id %}">Take down auction</a></div>
 
             </div>
