@@ -193,15 +193,19 @@ def create_listing(request):
             "form": NewListingForm()
         })
 
+
+@login_required
+def close_listing(request, listing_id):
+
+
 @login_required
 def my_listings(request):
-    
+
     listings = Listing.objects.filter(owner_id=request.user.id)
 
     return render(request, "auctions/my-listings.html", {
         "listings": listings
     })
-
 
 
 @login_required

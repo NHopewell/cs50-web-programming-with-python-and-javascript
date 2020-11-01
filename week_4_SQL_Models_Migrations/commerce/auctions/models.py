@@ -26,6 +26,7 @@ class Listing(models.Model):
     description = models.TextField()
     starting_bid = models.DecimalField(max_digits=8, decimal_places=2)
     date_posted = models.DateTimeField(default=timezone.now)
+    status = models.CharField(max_length=10, default="active")
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="listings")
 
     def __str__(self):
@@ -49,6 +50,7 @@ class Listing(models.Model):
 class ClosedAuctions(models.Model):
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE)
     date_closed = models.DateTimeField(default=timezone.now)
+    winner = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
 
 
 class Bid(models.Model):
