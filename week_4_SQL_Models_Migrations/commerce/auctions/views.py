@@ -201,7 +201,8 @@ def close_listing(request, listing_id, top_bidder):
     if request.method == "POST":
         listing = Listing.objects.filter(pk=listing_id)
         listing.update(status="closed")
-        closed_auction = ClosedAuctions(winner=top_bidder)
+        winner = User.objects.get(username=top_bidder)
+        closed_auction = ClosedAuctions(listing_id=listing_id, winner=winner)
         closed_auction.save()
 
         return HttpResponseRedirect(reverse("index"))
