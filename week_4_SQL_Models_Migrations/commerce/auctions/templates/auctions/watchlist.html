@@ -24,9 +24,11 @@
                     </div>
                     
                     <div class="col-10">
-                        <h3 class="card-title">{{listing.title}}</h3>
-                        <p class="card-text">Starting Bid: ${{listing.starting_bid}}</p>
-                        <a href="{% url 'listing' listing.id %}" class="btn btn-primary">See listing</a>
+                        <h3 class="card-title"><a href="{% url 'listing' listing.id %}">{{listing.title}}</a></h3>
+                        <p class="card-text">
+                            Starting Bid: ${{listing.starting_bid}}<br>
+                            Auction Status: <strong>{{listing.status}}</strong>
+                        </p>
 
                     </div>
                 </div>

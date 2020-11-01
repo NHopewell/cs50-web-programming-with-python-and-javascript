@@ -35,13 +35,15 @@
                     <div class="col-9">{{ listing.date_posted }}</div>
                 </div>
                 <div class="row">
-                    <div class="col">Days Active:</div>
                     {% if listing.status == 'closed'%}
-                    <div class="col-9"><em><strong>This auction is CLOSED</strong></em></div>
+                        <div class="col">Status:</div>
+                        <div class="col-9"><em><strong>This auction is CLOSED</strong></em></div>
                     {% elif days_active < 1 %}
-                    <div class="col-9"><em>Less than a day.</em></div>
+                        <div class="col">Days Active:</div>
+                        <div class="col-9"><em>Less than a day.</em></div>
                     {% else %}
-                    <div class="col-9">{{ days_active }}</div>
+                        <div class="col">Days Active:</div>
+                        <div class="col-9">{{ days_active }}</div>
                     {% endif %}
                 </div>
                 <div class="row mt-4">
@@ -102,7 +104,7 @@
                     </div>
                 </div>
 
-                {% if not listing.owner_id == user.id %}
+                {% if not listing.owner_id == user.id and listing.status == 'active' %}
                 <form class="form-inline mb-4" actions="{% url 'listing' listing.id %}" method="POST">
                     {% csrf_token %}
                     <div class="form-group mx-sm-3 mb-2">
@@ -123,26 +125,28 @@
                 </div>
                 {% endif %}
             {% else %}
-            <div class="container">
-                <form actions="{% url 'listing' listing.id %}" method="POST">
-                    {% csrf_token %}
-                    {% if on_watchlist %}
-                    <div>
-                        <em>Remove from watchlist:</em>
-                        <button type="submit" class="btn btn-link" name="submit-watchlist">
-                            <i class="fas fa-times-circle fa-2x"></i>
-                        </button>
+                {% if listing.status == 'active' %}
+                    <div class="container">
+                        <form actions="{% url 'listing' listing.id %}" method="POST">
+                            {% csrf_token %}
+                            {% if on_watchlist %}
+                            <div>
+                                <em>Remove from watchlist:</em>
+                                <button type="submit" class="btn btn-link" name="submit-watchlist">
+                                    <i class="fas fa-times-circle fa-2x"></i>
+                                </button>
+                            </div>
+                            {% else %}
+                            <div>
+                                <em>Add to watchlist: </em>
+                                <button type="submit" class="btn btn-link" name="submit-watchlist">
+                                    <i class="fas fa-glasses fa-2x"></i>
+                                </button>
+                            </div>
+                            {% endif %}
+                        </form>
                     </div>
-                    {% else %}
-                    <div>
-                        <em>Add to watchlist: </em>
-                        <button type="submit" class="btn btn-link" name="submit-watchlist">
-                            <i class="fas fa-glasses fa-2x"></i>
-                        </button>
-                    </div>
-                    {% endif %}
-                </form>
-            </div>
+                {% endif %}
             {% endif %}
         </div>
     </div>
