@@ -1,6 +1,11 @@
 import datetime
+from math import modf
 
 from .models import User, Listing, Watchlist, CATEGORY_CHOICES
+
+def silver_and_gold(bid):
+    s, g = modf(bid)
+    return (int(s*100), int(g))
 
 def get_diff_days(date):
 

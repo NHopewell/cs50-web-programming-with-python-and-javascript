@@ -64,14 +64,14 @@
                 <div class="container mb-4">
                     <div class="row">
                         <div class="col">Starting Bid:</div>
-                        <div class="col-9">${{ listing.starting_bid }}</div>
+                    <div class="col-9">{{ starting_bid.1 }} <img style="width:15px" src="/media/icons/gold_coin.PNG"> {{ starting_bid.0 }} <img style="width:15px" src="/media/icons/silver_coin.PNG"></div>
                     </div>
                     <div class="row">
                         {% if listing.status == 'closed'%}
 
                             <div class="col">Winning bid:</div>
                             {% if top_bid %}
-                                <div class="col-9"><strong style="font-size: 125%">${{top_bid}}</strong></div>
+                                <div class="col-9">{{ top_bid.1 }} <img style="width:15px" src="/media/icons/gold_coin.PNG"> {{ top_bid.0 }} <img style="width:15px" src="/media/icons/silver_coin.PNG"></div>
                             </div>
                             <div class="row mb-4">
                                 <div class="col">Winner:</div>
@@ -83,12 +83,11 @@
                             {% else %}
                                 <div class="col-9"><em>There was no top bid.</em></div>
                             {% endif %}
-                            
 
                         {% else %}
                             <div class="col">Top bid:</div>
                             {% if top_bid %}
-                                <div class="col-9"><strong style="font-size: 125%">${{top_bid}}</strong></div>
+                                <div class="col-9">${{ top_bid.1 }} <img style="width:15px" src="/media/icons/gold_coin.PNG"> {{ top_bid.0 }} <img style="width:15px" src="/media/icons/silver_coin.PNG"></div>
                             </div>
                             <div class="row mb-4">
                                 <div class="col">Top bidder:</div>

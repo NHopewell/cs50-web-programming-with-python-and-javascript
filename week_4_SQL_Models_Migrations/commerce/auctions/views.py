@@ -9,7 +9,7 @@ from django.urls import reverse
 from .models import User, Listing, Watchlist, Bid, ClosedAuctions, CATEGORY_CHOICES
 from .forms import NewListingForm
 from .helpers import (
-    get_listings_by_category, all_categories, map_category, get_diff_days
+    get_listings_by_category, all_categories, map_category, get_diff_days, silver_and_gold
 )
 
 
@@ -25,6 +25,7 @@ def closed_listings(request):
     return render(request, "auctions/closed_listings.html", {
         "listings": listings
     })
+
 
 def login_view(request):
     if request.method == "POST":
@@ -81,6 +82,9 @@ def register(request):
 def listing(request, listing_id):
 
     listing = Listing.objects.get(pk=listing_id)
+    starting_bid = silver_and_gold(listing.starting_bid)
+    print(starting_bid[0])
+
     owner = User.objects.get(pk=listing.owner_id)
     category = map_category(listing.category)
     days_active = get_diff_days(listing.date_posted)
@@ -91,6 +95,7 @@ def listing(request, listing_id):
         all_bids = [q.bid for q in Bid.objects.filter(listing_id=listing.id)]
         top_bid = format(float(max(all_bids)), '.2f')
         top_bidder = User.objects.get(pk=Bid.objects.get(bid=top_bid).bidder_id).username
+        top_bid = silver_and_gold(float(top_bid))
     else:
         top_bid = None
         top_bidder = None
@@ -114,6 +119,7 @@ def listing(request, listing_id):
                 "owner": owner,
                 "category": category,
                 "days_active": days_active,
+                "starting_bid": starting_bid,
                 "top_bid": top_bid,
                 "top_bidder": top_bidder,
                 "on_watchlist": False
@@ -127,6 +133,7 @@ def listing(request, listing_id):
                 new_bid.save()
                 top_bid = new_bid.bid
                 top_bidder = request.user.username
+                top_bid = silver_and_gold(float(top_bid))
 
                 messages.success(request, 'Your bid has been submitted')
 
@@ -135,6 +142,7 @@ def listing(request, listing_id):
                     "owner": owner,
                     "category": category,
                     "days_active": days_active,
+                    "starting_bid": starting_bid,
                     "top_bid": top_bid,
                     "top_bidder": top_bidder,
                     "on_watchlist": False
@@ -147,6 +155,7 @@ def listing(request, listing_id):
                     "owner": owner,
                     "category": category,
                     "days_active": days_active,
+                    "starting_bid": starting_bid,
                     "top_bid": top_bid,
                     "top_bidder": top_bidder,
                     "on_watchlist": False
@@ -160,6 +169,7 @@ def listing(request, listing_id):
                     "owner": owner,
                     "category": category,
                     "days_active": days_active,
+                    "starting_bid": starting_bid,
                     "top_bid": top_bid,
                     "top_bidder": top_bidder,
                     "on_watchlist": False
@@ -177,6 +187,7 @@ def listing(request, listing_id):
             "owner": owner,
             "category": category,
             "days_active": days_active,
+            "starting_bid": starting_bid,
             "top_bid": top_bid,
             "top_bidder": top_bidder,
             "on_watchlist": on_watchlist
