@@ -40,8 +40,8 @@ class Listing(models.Model):
         # resive img if larger
         img = Image.open(f"./{self.image.url}")
 
-        if img.height > 400 or img.width > 400:
-            output_size = (400, 400)
+        if img.height < 100 or img.width < 100:
+            output_size = (100, 100)
             img.thumbnail(output_size)
             img = img.convert("RGB")
             img.save(f"./{self.image.url}") # save to same path

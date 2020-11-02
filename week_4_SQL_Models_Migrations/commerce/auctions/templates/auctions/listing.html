@@ -11,12 +11,12 @@
     {% endfor %}
     {% endif %}
 </div>
-<div class="container mb-4 mt-4 p-2">
+<div class="container mb-4 mt-4 border p-2">
     <div class="row">
         <div class="col p-2">
             <div class="container">
                 <div class="card">
-                    <img class="card-img-top" src="{{ listing.image.url }}">
+                    <img class="card-img-top w-50 mx-auto" src="{{ listing.image.url }}">
                     <div class="card-body">
                         <p class="card-text">{{ listing.description }}</p>
                     </div>
@@ -117,7 +117,7 @@
             {% endif %}
 
             {% if listing.owner_id == user.id %}
-                {% if listing.status == 'active'%}
+                {% if listing.status == 'active' and top_bid%}
                 <div class="container mt-4">
                     <div><a class="btn btn-success mb-2" href="{% url 'close_listing' listing.id top_bidder %}">Close out auction</a></div>
                     <div><a class="btn btn-danger" href="{% url 'delete_listing' listing.id %}">Take down auction</a></div>
