@@ -12,9 +12,9 @@ class User(AbstractUser):
 
 nums = '1 2 3 4 5 6 7'.split()
 
-labs = ['Art & Collectibles', 'Clothing', 
-'Electronics', 'Health & Beauty', 'Home & Yard', 
-'Jewellery', 'Sporting Goods']
+labs = ['Weapons', 'Armor', 
+'Bags', 'Gems', 'Consumables & Potions', 
+'Trade Goods', 'Magical Items']
 
 CATEGORY_CHOICES = list(zip(nums, labs))
 

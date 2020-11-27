@@ -27,9 +27,9 @@ def map_category(category, choices=CATEGORY_CHOICES):
 
 def all_categories(Listing):
     """map categories to associated listings as dict"""
-    all_categories = ['Art & Collectibles', 'Clothing', 
-        'Electronics', 'Health & Beauty', 'Home & Yard', 
-        'Jewellery', 'Sporting Goods']
+    all_categories = ['Weapons', 'Armor', 
+        'Bags', 'Gems', 'Consumables & Potions', 
+        'Trade Goods', 'Magical Items']
     category_listings = [Listing.objects.filter(category=cat) for cat in all_categories]
 
     return dict(zip(all_categories, category_listings))
