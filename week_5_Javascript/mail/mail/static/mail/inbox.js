@@ -33,7 +33,10 @@ function load_mailbox(mailbox) {
   document.querySelector('#emails-view').style.display = 'block';
   document.querySelector('#compose-view').style.display = 'none';
 
-  get_mailbox(mailbox);
+  if (mailbox === 'sent') {
+    get_sent();
+  };
+  //get_mailbox(mailbox);
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
@@ -57,14 +60,50 @@ function post_email() {
   .then(response => response.json());
 };
 
-function get_mailbox(mailbox) {
+function get_sent() {
 
-  fetch(`http://127.0.0.1:8000/emails/${mailbox}`)
+  fetch('http://127.0.0.1:8000/emails/sent')
   .then(res => res.json())
   .then(sent_emails => {
+    // Each email should then be rendered in its own box (e.g. as a <div> with a border) that displays who the email is from, what the subject line is, and the timestamp of the email.
+
+    let emails_div = document.querySelector('#emails-view');
+
+    sent_emails.forEach(email => {
+
+      const sender = document.createElement('b');
+      sender.innerHTML = email['sender'];
+      sender.style.display = "inline-block";
+      sender.style.padding = "8px";
+      sender.style.marginTop = "auto";
+      sender.style.marginBottom = "auto";
+
+      const subject = document.createElement('p');
+      subject.innerHTML = email['subject'];
+      subject.style.display = "inline-block";
+      subject.style.padding = "8px";
+      subject.style.marginTop = "auto";
+      subject.style.marginBottom = "auto";
 
 
-    document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
-    
+      const timestamp = document.createElement('p');
+      timestamp.innerHTML = email['timestamp'];
+      timestamp.style.display = "inline-block";
+      timestamp.style.padding = "8px";
+      timestamp.style.marginTop = "auto";
+      timestamp.style.marginBottom = "auto";
+      timestamp.style.marginLeft = "auto";
+      timestamp.style.color = "grey";
+
+      let email_container = document.createElement('div');
+      email_container.style.border = "solid 1px";
+      email_container.style.display = "flex";
+      email_container.style.padding = "6px";
+
+
+      //email_container.innerHTML = `${sender}  ${subject}  ${timestamp}`;
+      email_container.append(sender, subject, timestamp);
+      emails_div.append(email_container);
+    });
   });
 };
