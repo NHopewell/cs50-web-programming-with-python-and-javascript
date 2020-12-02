@@ -33,12 +33,13 @@ function load_mailbox(mailbox) {
   document.querySelector('#emails-view').style.display = 'block';
   document.querySelector('#compose-view').style.display = 'none';
 
+  get_mailbox(mailbox);
+
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
 }
 
 function post_email() {
-
 
   recipients = document.querySelector('#compose-recipients').value;
   subject = document.querySelector('#compose-subject').value;
@@ -53,5 +54,17 @@ function post_email() {
         body: body
     })
   })
-  .then(response => response.json())
+  .then(response => response.json());
+};
+
+function get_mailbox(mailbox) {
+
+  fetch(`http://127.0.0.1:8000/emails/${mailbox}`)
+  .then(res => res.json())
+  .then(sent_emails => {
+
+
+    document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+    
+  });
 };
